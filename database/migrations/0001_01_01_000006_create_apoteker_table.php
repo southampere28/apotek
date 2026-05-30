@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('apoteker', function (Blueprint $table) {
-            $table->string('kode_apoteker')->primary();
+            $table->id();
+            $table->string('kode_apoteker')->unique();
             $table->foreignId('user_id')->unique()->constrained('users')->cascadeOnDelete();
             $table->string('nama');
             $table->text('alamat');

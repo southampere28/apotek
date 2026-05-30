@@ -129,6 +129,8 @@
                 <strong>Role aktif:</strong> {{ $role }}
                 <p>Halaman ini hanya bisa diakses jika role cocok dengan middleware route group.</p>
             </div>
+
+            @yield('dashboard-content')
         </div>
     </div>
 </body>

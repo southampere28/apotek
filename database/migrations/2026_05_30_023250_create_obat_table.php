@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('obat', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_obat')->unique();
+            $table->string('nama_obat');
+            $table->text('jenis');
+            $table->unsignedBigInteger('harga_beli');
+            $table->unsignedBigInteger('harga_jual');
+            $table->integer('stok');
+            $table->foreignId('supplier_id')->constrained('supplier')->cascadeOnDelete();
             $table->timestamps();
         });
     }
