@@ -109,6 +109,7 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
+                            <th class="px-4 py-3">Gambar</th>
                             <th class="px-4 py-3">Nama Obat</th>
                             <th class="px-4 py-3">Kode</th>
                             <th class="px-4 py-3">Jenis</th>
@@ -122,6 +123,15 @@
                     <tbody>
                         @forelse ($obatList as $obat)
                             <tr>
+                                <td class="px-4 py-3">
+                                    <div class="rounded-3 border bg-light overflow-hidden d-flex align-items-center justify-content-center" style="width: 72px; height: 72px;">
+                                        @if ($obat->gambar_obat)
+                                            <img src="{{ asset('storage/' . $obat->gambar_obat) }}" alt="{{ $obat->nama_obat }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                                        @else
+                                            <span class="text-secondary small text-center px-2">No Image</span>
+                                        @endif
+                                    </div>
+                                </td>
                                 <td class="px-4 py-3">
                                     <div class="fw-semibold text-dark">{{ $obat->nama_obat }}</div>
                                     <div class="text-secondary small">Obat master untuk transaksi apotek.</div>
@@ -151,7 +161,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-4 py-5 text-center text-secondary">
+                                <td colspan="9" class="px-4 py-5 text-center text-secondary">
                                     Belum ada data obat. Seeder atau input manual belum menghasilkan data.
                                 </td>
                             </tr>

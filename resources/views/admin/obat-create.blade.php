@@ -27,8 +27,23 @@
         </div>
 
         <div class="card-body p-4">
-            <form action="{{ route('admin.obat.store') }}" method="POST" class="row g-4">
+            <form action="{{ route('admin.obat.store') }}" method="POST" class="row g-4" enctype="multipart/form-data">
                 @csrf
+
+                <div class="col-12 col-md-6">
+                    <label for="gambar_obat" class="form-label fw-semibold">Gambar Obat</label>
+                    <input
+                        type="file"
+                        id="gambar_obat"
+                        name="gambar_obat"
+                        class="form-control form-control-lg @error('gambar_obat') is-invalid @enderror"
+                        accept="image/png,image/jpeg,image/webp"
+                    >
+                    <div class="form-text">Upload gambar obat dari file lokal. Disimpan ke public storage.</div>
+                    @error('gambar_obat')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
 
                 <div class="col-12 col-md-6">
                     <label for="kode_obat" class="form-label fw-semibold">Kode Obat</label>

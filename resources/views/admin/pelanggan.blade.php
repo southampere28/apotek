@@ -1,6 +1,12 @@
 @extends('layouts.admin')
 
 @section('dashboard-content')
+    @if (session('success'))
+        <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4" role="alert">
+            <div class="fw-bold mb-1">Berhasil</div>
+            <div>{{ session('success') }}</div>
+        </div>
+    @endif
 
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-header bg-white border-0 rounded-top-4 py-3 px-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
@@ -8,7 +14,7 @@
                 <h2 class="h4 fw-bold mb-1 text-primary-emphasis">Manajemen Pelanggan</h2>
                 <p class="mb-0 text-secondary">Konten halaman ini memuat data pelanggan real dari database.</p>
             </div>
-            <a href="#" class="btn btn-success fw-semibold px-4 rounded-pill">Tambah Pelanggan</a>
+            <a href="{{ route('admin.pelanggan.create') }}" class="btn btn-success fw-semibold px-4 rounded-pill">Tambah Pelanggan</a>
         </div>
 
         <div class="card-body p-0">

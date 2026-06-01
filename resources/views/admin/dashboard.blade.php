@@ -1,6 +1,12 @@
 @extends('layouts.admin')
 
 @section('dashboard-content')
+    @php
+        $currentUser = auth('web')->user();
+        $currentUserName = $currentUser?->name ?? 'Admin';
+        $currentUserInitial = strtoupper(mb_substr($currentUserName, 0, 1));
+    @endphp
+
     <header class="topbar">
         @include('layouts.partials.mobile-toggle')
         <div class="page-head">
@@ -11,10 +17,10 @@
 
         <div class="topbar-actions">
             <div style="text-align: right;">
-                <div style="font-weight: 800;">Admin Aktif</div>
+                <div style="font-weight: 800;">{{ $currentUserName }}</div>
                 <div class="meta">Sesi berjalan</div>
             </div>
-            <div class="avatar">A</div>
+            <div class="avatar">{{ $currentUserInitial }}</div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button class="logout" type="submit">Logout</button>

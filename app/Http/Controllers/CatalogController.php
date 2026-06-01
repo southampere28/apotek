@@ -41,4 +41,25 @@ class CatalogController extends Controller
             'role' => auth('web')->check() ? auth('web')->user()->role : 'pengunjung',
         ]);
     }
+
+    public function history(Request $request)
+    {
+        $user = $request->user();
+        $pelanggan = $user?->pelanggan;
+
+        abort_if(! $pelanggan, 403);
+
+        $riwayat = $pelanggan->penjualan()
+            ->with(['detail.obat'])
+            ->orderByDesc('tanggal_nota')
+            ->get();
+
+        return view('catalog.history', [
+            'title' => 'Riwayat Pembelian',
+            'description' => 'Lihat histori pembelian obat milik akun pelanggan ini.',
+            'pelanggan' => $pelanggan,
+            'riwayat' => $riwayat,
+            'role' => $user?->role ?? 'pelanggan',
+        ]);
+    }
 }

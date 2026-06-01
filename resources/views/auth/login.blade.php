@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Apotek</title>
+    <title>Login - {{ config('apotek.app_name', 'Farmasi Kita') }}</title>
     <style>
         :root {
             color-scheme: light;
@@ -70,6 +70,30 @@
             font-weight: 700;
             letter-spacing: 0.04em;
             text-transform: uppercase;
+        }
+
+        .brand-lockup {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .brand-logo {
+            width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: rgba(15, 118, 110, 0.08);
+            border: 1px solid rgba(15, 118, 110, 0.12);
+            flex: 0 0 auto;
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         h1 {
@@ -205,7 +229,14 @@
     <div class="shell">
         <section class="hero">
             <div>
-                <div class="eyebrow">Apotek Ujikom</div>
+                <div class="brand-lockup">
+                    <div class="brand-logo">
+                        <img src="{{ asset('images/app_logo.png') }}" alt="{{ config('apotek.brand_name', config('apotek.app_name', 'Farmasi Kita')) }}">
+                    </div>
+                    <div>
+                        <div class="eyebrow" style="margin: 0;">{{ config('apotek.brand_name', config('apotek.app_name', 'Farmasi Kita')) }}</div>
+                    </div>
+                </div>
                 <h1>Sistem login untuk admin, apoteker, dan pelanggan.</h1>
                 <p class="lead">
                     Masuk ke aplikasi sesuai role akun kamu. Hak akses akan diarahkan otomatis ke dashboard yang sesuai.
@@ -215,15 +246,15 @@
             <div class="points">
                 <div class="point">
                     <strong>Admin</strong>
-                    Kelola master data, pengguna, dan pengaturan aplikasi.
+                    Kelola data obat, supplier, user, dan laporan transaksi.
                 </div>
                 <div class="point">
                     <strong>Apoteker</strong>
-                    Proses resep, pantau stok, dan layani transaksi obat.
+                    Proses transaksi penjualan dan pantau stok obat.
                 </div>
                 <div class="point">
                     <strong>Pelanggan</strong>
-                    Lihat katalog, pesanan, dan riwayat pembelian.
+                    Melihat katalog obat dan riwayat pembelian sebagai customer apotek.
                 </div>
             </div>
         </section>
@@ -262,7 +293,7 @@
             </form>
 
             <div class="footer">
-                Akses login dilindungi Sanctum dan middleware role.
+                Belum punya akun? <a href="{{ route('register') }}" style="color:var(--primary-dark); font-weight:700; text-decoration:none;">Daftar sebagai pelanggan</a>.
             </div>
         </section>
     </div>

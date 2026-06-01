@@ -47,7 +47,7 @@ class LoginController extends Controller
         return match (Auth::guard('web')->user()?->role) {
             'admin' => route('admin.dashboard'),
             'apoteker' => route('apoteker.dashboard'),
-            'pelanggan' => route('pelanggan.dashboard'),
+            'pelanggan' => route('home'),
             default => route('dashboard'),
         };
     }

@@ -17,7 +17,7 @@
     <div class="app">
         @include('layouts.partials.sidebar', [
             'sidebarId' => 'app-sidebar',
-            'brandMark' => 'K',
+            'brandLogoPath' => 'images/app_logo.png',
             'brandTitle' => 'Apotek Ujikom',
             'brandSubtitle' => 'Dashboard pelanggan',
             'activeLabel' => 'Pelanggan Aktif',

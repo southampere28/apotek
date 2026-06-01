@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title }}</title>
+    <title>{{ $title }} - {{ config('apotek.app_name', 'Farmasi Kita') }}</title>
     @include('layouts.template')
 </head>
 <body>
+    @php
+        $currentUser = auth('web')->user();
+        $currentUserName = $currentUser?->name ?? 'Admin';
+        $currentUserInitial = strtoupper(mb_substr($currentUserName, 0, 1));
+    @endphp
     <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="app-sidebar" aria-expanded="false">
         <span></span>
         <span></span>
@@ -17,15 +22,16 @@
     <div class="app">
         @include('layouts.partials.sidebar', [
             'sidebarId' => 'app-sidebar',
-            'brandMark' => 'A',
-            'brandTitle' => 'Apotek Ujikom',
+            'brandLogoPath' => 'images/app_logo.png',
+            'brandTitle' => config('apotek.brand_name', config('apotek.app_name', 'Farmasi Kita')),
             'brandSubtitle' => 'Dashboard admin',
-            'activeLabel' => 'Admin Aktif',
+            'activeLabel' => $currentUserName,
             'menuSections' => [
                 [
                     'label' => 'Menu utama',
                     'items' => [
                         ['label' => 'Dashboard', 'routeName' => 'admin.dashboard'],
+                        ['label' => 'Preview Katalog', 'routeName' => 'home', 'target' => '_blank'],
                         ['label' => 'Master Obat', 'routeName' => 'admin.obat.index'],
                         ['label' => 'Pembelian', 'routeName' => 'admin.pembelian.index'],
                         ['label' => 'Penjualan', 'routeName' => 'admin.penjualan.index'],

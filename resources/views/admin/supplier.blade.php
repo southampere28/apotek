@@ -1,6 +1,13 @@
 @extends('layouts.admin')
 
 @section('dashboard-content')
+    @if (session('success'))
+        <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4" role="alert">
+            <div class="fw-bold mb-1">Berhasil</div>
+            <div>{{ session('success') }}</div>
+        </div>
+    @endif
+
     <div class="alert alert-warning border-0 shadow-sm rounded-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4" role="alert">
         <div>
             <div class="fw-bold text-warning-emphasis mb-1">Manajemen Supplier</div>
@@ -54,7 +61,7 @@
                 <h2 class="h4 fw-bold mb-1 text-primary-emphasis">Daftar Supplier</h2>
                 <p class="mb-0 text-secondary">Data tampil real dari database dan bisa langsung dipakai untuk manajemen.</p>
             </div>
-            <a href="#" class="btn btn-success fw-semibold px-4 rounded-pill">Tambah Supplier</a>
+            <a href="{{ route('admin.supplier.create') }}" class="btn btn-success fw-semibold px-4 rounded-pill">Tambah Supplier</a>
         </div>
 
         <div class="card-body p-0">

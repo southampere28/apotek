@@ -7,6 +7,7 @@ use App\Models\Obat;
 use App\Models\Supplier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -71,6 +72,7 @@ class ProductController extends Controller
 		$validated = $request->validate([
 			'kode_obat' => ['required', 'string', 'max:255', 'unique:obat,kode_obat'],
 			'nama_obat' => ['required', 'string', 'max:255'],
+			'gambar_obat' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
 			'jenis' => ['required', 'string', 'max:255'],
 			'harga_beli' => ['required', 'integer', 'min:0'],
 			'harga_jual' => ['required', 'integer', 'min:0'],
@@ -78,6 +80,10 @@ class ProductController extends Controller
 			'tanggal_kadaluarsa' => ['required', 'date'],
 			'supplier_id' => ['required', 'exists:supplier,id'],
 		]);
+
+		if ($request->hasFile('gambar_obat')) {
+			$validated['gambar_obat'] = Storage::disk('public')->putFile('obat', $request->file('gambar_obat'));
+		}
 
 		Obat::create($validated);
 

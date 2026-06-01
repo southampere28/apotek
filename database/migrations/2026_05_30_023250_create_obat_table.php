@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_obat')->unique();
             $table->string('nama_obat');
+            $table->string('gambar_obat')->nullable();
             $table->text('jenis');
             $table->unsignedBigInteger('harga_beli');
             $table->unsignedBigInteger('harga_jual');

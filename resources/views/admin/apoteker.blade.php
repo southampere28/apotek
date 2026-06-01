@@ -1,6 +1,13 @@
 @extends('layouts.admin')
 
 @section('dashboard-content')
+    @if (session('success'))
+        <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4" role="alert">
+            <div class="fw-bold mb-1">Berhasil</div>
+            <div>{{ session('success') }}</div>
+        </div>
+    @endif
+
     <div class="alert alert-primary border-0 shadow-sm rounded-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4" role="alert">
         <div>
             <div class="fw-bold text-primary-emphasis mb-1">Manajemen Apoteker</div>
@@ -45,7 +52,7 @@
                 <h2 class="h4 fw-bold mb-1 text-primary-emphasis">Daftar Apoteker</h2>
                 <p class="mb-0 text-secondary">Tabel ini menampilkan apoteker real dari database dan data login yang terhubung.</p>
             </div>
-            <a href="#" class="btn btn-success fw-semibold px-4 rounded-pill">Tambah Apoteker</a>
+            <a href="{{ route('admin.apoteker.create') }}" class="btn btn-success fw-semibold px-4 rounded-pill">Tambah Apoteker</a>
         </div>
 
         <div class="card-body p-0">

@@ -1,7 +1,8 @@
 @php
     $sidebarId = $sidebarId ?? 'app-sidebar';
     $brandMark = $brandMark ?? 'A';
-    $brandTitle = $brandTitle ?? 'Apotek Ujikom';
+    $brandLogoPath = $brandLogoPath ?? 'images/app_logo.png';
+    $brandTitle = $brandTitle ?? config('apotek.brand_name', config('apotek.app_name', 'Farmasi Kita'));
     $brandSubtitle = $brandSubtitle ?? 'Dashboard';
     $menuSections = $menuSections ?? [];
     $activeLabel = $activeLabel ?? 'Dashboard';
@@ -11,13 +12,17 @@
 
 <aside class="sidebar" id="{{ $sidebarId }}">
     <div class="brand">
-        <div class="brand-mark">{{ $brandMark }}</div>
+        <div class="brand-mark">
+            <img src="{{ asset($brandLogoPath) }}" alt="{{ $brandTitle }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        </div>
         <strong>{{ $brandTitle }}</strong>
         <small>{{ $brandSubtitle }}</small>
     </div>
 
     <div class="user-card">
-        <div class="user-avatar">{{ $brandMark }}</div>
+        <div class="user-avatar">
+            <img src="{{ asset($brandLogoPath) }}" alt="{{ $brandTitle }}" style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 999px;">
+        </div>
         <div class="user-info">
             <strong>{{ $activeLabel }}</strong>
             <span>{{ $footerBadge }}</span>
@@ -34,6 +39,7 @@
                         @php
                             $itemRouteName = $item['routeName'] ?? null;
                             $itemUrl = $itemRouteName ? route($itemRouteName) : ($item['url'] ?? '#');
+                            $itemTarget = $item['target'] ?? null;
                             $isActive = $item['active'] ?? false;
 
                             if (! $isActive && $itemRouteName) {
@@ -44,6 +50,10 @@
                         <a
                             class="nav-link {{ $isActive ? 'active' : '' }}"
                             href="{{ $itemUrl }}"
+                            @if ($itemTarget)
+                                target="{{ $itemTarget }}"
+                                @if ($itemTarget === '_blank') rel="noopener noreferrer" @endif
+                            @endif
                         >
                             <span>{{ $item['label'] ?? '' }}</span>
                             @if (! empty($item['badge']))

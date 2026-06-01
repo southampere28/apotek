@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title }}</title>
+    <title>{{ $title }} - {{ config('apotek.app_name', 'Farmasi Kita') }}</title>
     <style>
         :root {
             --bg: #f3f7fb;
@@ -71,6 +71,15 @@
             background: linear-gradient(135deg, var(--accent), var(--accent-2));
             color: #fff;
             font-weight: 900;
+            overflow: hidden;
+            flex: 0 0 auto;
+        }
+
+        .brand-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .hero h1 {
@@ -246,10 +255,12 @@
         <header class="hero">
             <div>
                 <div class="brand">
-                    <div class="brand-mark">A</div>
+                    <div class="brand-mark">
+                        <img src="{{ asset('images/app_logo.png') }}" alt="{{ config('apotek.brand_name', config('apotek.app_name', 'Farmasi Kita')) }}">
+                    </div>
                     <div>
-                        <div style="font-weight: 900; font-size: 18px;">Apotek Ujikom</div>
-                        <div class="muted">Katalog obat publik</div>
+                        <div style="font-weight: 900; font-size: 18px;">{{ config('apotek.brand_name', config('apotek.app_name', 'Farmasi Kita')) }}</div>
+                        <div class="muted">Akses katalog sesuai status login</div>
                     </div>
                 </div>
 
@@ -258,8 +269,24 @@
             </div>
 
             <div class="hero-actions">
-                <a class="button" href="{{ route('login') }}">Login</a>
-                <a class="button primary" href="{{ route('home') }}">Katalog Obat</a>
+                @guest('web')
+                    <a class="button" href="{{ route('register') }}">Daftar</a>
+                    <a class="button primary" href="{{ route('login') }}">Login</a>
+                @else
+                    @if (auth('web')->user()?->role === 'pelanggan')
+                        @if (request()->routeIs('riwayat.index'))
+                            <a class="button" href="{{ route('home') }}">Katalog Obat</a>
+                        @else
+                            <a class="button" href="{{ route('riwayat.index') }}">Riwayat Pembelian</a>
+                        @endif
+                    @else
+                        <a class="button" href="{{ route('dashboard') }}">Dashboard</a>
+                    @endif
+                    <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+                        @csrf
+                        <button class="button primary" type="submit">Logout</button>
+                    </form>
+                @endguest
             </div>
         </header>
 
