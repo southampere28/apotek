@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }} - {{ config('apotek.app_name', 'Farmasi Kita') }}</title>
     @include('layouts.template')
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app-datatable.css') }}">
+
+    @stack('styles')
 </head>
 <body>
     @php
@@ -96,5 +100,9 @@
             }
         })();
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
+    <script src="{{ asset('js/app-datatable.js') }}"></script>
+
+    @stack('scripts')
 </body>
 </html>

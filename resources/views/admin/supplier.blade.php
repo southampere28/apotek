@@ -13,7 +13,7 @@
             <div class="fw-bold text-warning-emphasis mb-1">Manajemen Supplier</div>
             <div class="text-warning-emphasis">Halaman ini mengambil data real dari tabel supplier beserta relasi obat dan pembelian.</div>
         </div>
-        <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Data Real</span>
+        {{-- <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Data Real</span> --}}
     </div>
 
     <div class="row g-4 mb-4">
@@ -65,8 +65,13 @@
         </div>
 
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive p-2">
+                <table id="supplierDatatable"
+                    class="table table-hover align-middle mb-0 js-datatable"
+                    data-per-page="5"
+                    data-searchable="false"
+                    data-sortable="true">
+
                     <thead class="table-light">
                         <tr>
                             <th class="px-4 py-3">Nama Supplier</th>
@@ -74,6 +79,7 @@
                             <th class="px-4 py-3">Kontak</th>
                             <th class="px-4 py-3">Obat</th>
                             <th class="px-4 py-3">Pembelian</th>
+                            <th class="px-4 py-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -96,10 +102,20 @@
                                 <td class="px-4 py-3">
                                     <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">{{ $supplier->pembelian_count }}</span>
                                 </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-inline-flex flex-wrap gap-2 justify-content-end">
+                                        <a href="{{ route('admin.supplier.edit', $supplier) }}" class="btn btn-outline-primary btn-sm rounded-pill">Edit</a>
+                                        <form action="{{ route('admin.supplier.destroy', $supplier) }}" method="POST" onsubmit="return confirm('Hapus data supplier ini?')" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-5 text-center text-secondary">
+                                <td colspan="6" class="px-4 py-5 text-center text-secondary">
                                     Belum ada data supplier. Seeder atau input manual belum menghasilkan data.
                                 </td>
                             </tr>
@@ -110,53 +126,4 @@
         </div>
     </div>
 
-    <section class="content mt-4">
-        <div class="panel border-0 shadow-sm">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Ringkasan Supplier</h2>
-                    <p class="panel-subtitle">Pakai ini untuk dashboard ringkas di bawah tabel utama.</p>
-                </div>
-            </div>
-
-            <div class="quick-grid">
-                <div class="quick-card border rounded-4">
-                    <strong>Supplier Aktif</strong>
-                    <span>{{ $totalSupplier }} supplier aktif di sistem.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Relasi Obat</strong>
-                    <span>{{ $totalObatTerkait }} total obat terhubung ke supplier.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Riwayat Pembelian</strong>
-                    <span>{{ $totalPembelianTerkait }} pembelian terkait supplier.</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel border-0 shadow-sm">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Aksi Cepat</h2>
-                    <p class="panel-subtitle">Shortcut untuk modul supplier.</p>
-                </div>
-            </div>
-
-            <div class="quick-grid">
-                <div class="quick-card border rounded-4">
-                    <strong>Tambah Data</strong>
-                    <span>Form supplier baru akan masuk di sini.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Relasi Obat</strong>
-                    <span>Hubungkan supplier dengan master obat.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Riwayat Pembelian</strong>
-                    <span>Lihat transaksi pembelian per supplier.</span>
-                </div>
-            </div>
-        </div>
-    </section>
 @endsection

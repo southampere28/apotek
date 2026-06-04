@@ -8,6 +8,44 @@
         </div>
     @endif
 
+    <div class="alert alert-warning border-0 shadow-sm rounded-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4" role="alert">
+        <div>
+            <div class="fw-bold text-warning-emphasis mb-1">Manajemen Pelanggan</div>
+            <div class="text-warning-emphasis">Atur data pelanggan anda.</div>
+        </div>
+        {{-- <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Data Real</span> --}}
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="text-secondary small mb-1">Total Pelanggan</div>
+                    <div class="display-6 fw-bold text-primary-emphasis mb-2">{{ $totalPelanggan }}</div>
+                    <div class="text-secondary small">Semua data pelanggan yang tersimpan.</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="text-secondary small mb-1">Terhubung ke Akun</div>
+                    <div class="display-6 fw-bold text-success mb-2">{{ $pelangganDenganAkun }}</div>
+                    <div class="text-secondary small">Pelanggan yang sudah punya akun login.</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="text-secondary small mb-1">Baru Bulan Ini</div>
+                    <div class="display-6 fw-bold text-warning mb-2">{{ $pelangganBaruBulanIni }}</div>
+                    <div class="text-secondary small">Pelanggan yang dibuat bulan ini.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-header bg-white border-0 rounded-top-4 py-3 px-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
             <div>
@@ -18,8 +56,13 @@
         </div>
 
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive p-2">
+                <table id="pelangganDatatable"
+                    class="table table-hover align-middle mb-0 js-datatable"
+                    data-per-page="5"
+                    data-searchable="false"
+                    data-sortable="true">
+
                     <thead class="table-light">
                         <tr>
                             <th class="px-4 py-3">Nama Pelanggan</th>
@@ -27,6 +70,7 @@
                             <th class="px-4 py-3">Kontak</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3">Dibuat</th>
+                            <th class="px-4 py-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,10 +93,20 @@
                                 <td class="px-4 py-3 text-secondary">
                                     {{ $pelanggan->created_at?->format('d M Y') ?? '-' }}
                                 </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-inline-flex flex-wrap gap-2 justify-content-end">
+                                        <a href="{{ route('admin.pelanggan.edit', $pelanggan) }}" class="btn btn-outline-primary btn-sm rounded-pill">Edit</a>
+                                        <form action="{{ route('admin.pelanggan.destroy', $pelanggan) }}" method="POST" onsubmit="return confirm('Hapus data pelanggan ini?')" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-5 text-center text-secondary">
+                                <td colspan="6" class="px-4 py-5 text-center text-secondary">
                                     Belum ada data pelanggan. Seeder atau input manual belum menghasilkan data.
                                 </td>
                             </tr>
@@ -62,52 +116,6 @@
 
             </div>
         </div>
-        {{-- testing bootstrap class  --}}
     </div>
 
-    <section class="content mt-4">
-        <div class="panel border-0 shadow-sm">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Ringkasan Pelanggan</h2>
-                    <p class="panel-subtitle">Nanti bisa diganti ke data asli dari database.</p>
-                </div>
-            </div>
-
-            <div class="quick-grid">
-                <div class="quick-card border rounded-4">
-                    <strong>Total Pelanggan</strong>
-                    <span>{{ $totalPelanggan }} pelanggan tersimpan di database.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Pelanggan Aktif</strong>
-                    <span>{{ $pelangganDenganAkun }} pelanggan terhubung ke akun user.</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel border-0 shadow-sm">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Aksi Cepat</h2>
-                    <p class="panel-subtitle">Shortcut untuk modul pelanggan.</p>
-                </div>
-            </div>
-
-            <div class="quick-grid">
-                <div class="quick-card border rounded-4">
-                    <strong>Tambah Data</strong>
-                    <span>Form pelanggan baru akan masuk di sini.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Riwayat Transaksi</strong>
-                    <span>Tampilkan histori pembelian pelanggan.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Pelanggan Bulan Ini</strong>
-                    <span>{{ $pelangganBaruBulanIni }} pelanggan dibuat bulan ini.</span>
-                </div>
-            </div>
-        </div>
-    </section>
 @endsection

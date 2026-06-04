@@ -56,8 +56,13 @@
         </div>
 
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive p-2">
+                <table id="apotekerDatatable"
+                    class="table table-hover align-middle mb-0 js-datatable"
+                    data-per-page="5"
+                    data-searchable="false"
+                    data-sortable="true">
+                    
                     <thead class="table-light">
                         <tr>
                             <th class="px-4 py-3">Nama Apoteker</th>
@@ -65,6 +70,7 @@
                             <th class="px-4 py-3">Kontak</th>
                             <th class="px-4 py-3">Akun</th>
                             <th class="px-4 py-3">Dibuat</th>
+                            <th class="px-4 py-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,10 +93,20 @@
                                 <td class="px-4 py-3 text-secondary">
                                     {{ $apoteker->created_at?->format('d M Y') ?? '-' }}
                                 </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-inline-flex flex-wrap gap-2 justify-content-end">
+                                        <a href="{{ route('admin.apoteker.edit', $apoteker) }}" class="btn btn-outline-primary btn-sm rounded-pill">Edit</a>
+                                        <form action="{{ route('admin.apoteker.destroy', $apoteker) }}" method="POST" onsubmit="return confirm('Hapus data apoteker ini?')" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-5 text-center text-secondary">
+                                <td colspan="6" class="px-4 py-5 text-center text-secondary">
                                     Belum ada data apoteker. Seeder atau input manual belum menghasilkan data.
                                 </td>
                             </tr>
@@ -101,53 +117,4 @@
         </div>
     </div>
 
-    <section class="content mt-4">
-        <div class="panel border-0 shadow-sm">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Ringkasan Apoteker</h2>
-                    <p class="panel-subtitle">Pakai ini untuk ringkasan dashboard admin.</p>
-                </div>
-            </div>
-
-            <div class="quick-grid">
-                <div class="quick-card border rounded-4">
-                    <strong>Apoteker Aktif</strong>
-                    <span>{{ $apotekerDenganAkun }} apoteker sudah terhubung akun.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Baru Bulan Ini</strong>
-                    <span>{{ $apotekerBaruBulanIni }} apoteker dibuat bulan ini.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Manajemen Akses</strong>
-                    <span>Menu ini nanti bisa dihubungkan ke edit role dan akun.</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel border-0 shadow-sm">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Aksi Cepat</h2>
-                    <p class="panel-subtitle">Shortcut untuk modul apoteker.</p>
-                </div>
-            </div>
-
-            <div class="quick-grid">
-                <div class="quick-card border rounded-4">
-                    <strong>Tambah Apoteker</strong>
-                    <span>Form pendaftaran apoteker baru.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Edit Data</strong>
-                    <span>Perbarui identitas dan akun apoteker.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Manajemen Akun</strong>
-                    <span>Hubungkan apoteker ke user login.</span>
-                </div>
-            </div>
-        </div>
-    </section>
 @endsection

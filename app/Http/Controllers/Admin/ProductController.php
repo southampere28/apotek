@@ -67,6 +67,17 @@ class ProductController extends Controller
 		]);
 	}
 
+	public function edit(Obat $obat): View
+	{
+		return view('admin.obat-edit', [
+			'title' => 'Edit Obat',
+			'role' => 'admin',
+			'description' => 'Perbarui nama obat, harga beli, harga jual, dan stok obat.',
+			'tanggal_kadaluarsa' => $obat->tanggal_kadaluarsa,
+			'obat' => $obat->load('supplier'),
+		]);
+	}
+
 	public function store(Request $request): RedirectResponse
 	{
 		$validated = $request->validate([
@@ -90,5 +101,35 @@ class ProductController extends Controller
 		return redirect()
 			->route('admin.obat.index')
 			->with('success', 'Obat baru berhasil ditambahkan.');
+	}
+
+	public function update(Request $request, Obat $obat): RedirectResponse
+	{
+		$validated = $request->validate([
+			'nama_obat' => ['required', 'string', 'max:255'],
+			'harga_beli' => ['required', 'integer', 'min:0'],
+			'harga_jual' => ['required', 'integer', 'min:0'],
+			'tanggal_kadaluarsa' => ['required', 'date'],
+			'stok' => ['required', 'integer', 'min:0'],
+		]);
+
+		$obat->update($validated);
+
+		return redirect()
+			->route('admin.obat.index')
+			->with('success', 'Data obat berhasil diperbarui.');
+	}
+
+	public function destroy(Obat $obat): RedirectResponse
+	{
+		if ($obat->gambar_obat) {
+			Storage::disk('public')->delete($obat->gambar_obat);
+		}
+
+		$obat->delete();
+
+		return redirect()
+			->route('admin.obat.index')
+			->with('success', 'Data obat berhasil dihapus.');
 	}
 }

@@ -97,6 +97,59 @@ class UserController extends Controller
         ]);
     }
 
+    public function pelangganEdit(Pelanggan $pelanggan): View
+    {
+        return view('admin.pelanggan-edit', [
+            'title' => 'Edit Pelanggan',
+            'role' => 'admin',
+            'description' => 'Perbarui data pelanggan, status akun, dan informasi kontak.',
+            'kodePelanggan' => $pelanggan->kode_pelanggan,
+            'pelanggan' => $pelanggan->load('user'),
+        ]);
+    }
+
+    public function pelangganUpdate(Request $request, Pelanggan $pelanggan): RedirectResponse
+    {
+        $validated = $request->validate([
+            'kode_pelanggan' => ['required', 'string', 'max:255', 'unique:pelanggan,kode_pelanggan,' . $pelanggan->id],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $pelanggan->user->id],
+            'alamat' => ['required', 'string'],
+            'kota' => ['required', 'string', 'max:255'],
+            'telepon' => ['required', 'string', 'max:20'],
+        ]);
+
+        DB::transaction(function () use ($validated, $pelanggan) {
+            $pelanggan->update([
+                'kode_pelanggan' => $validated['kode_pelanggan'],
+                'nama' => $validated['name'],
+                'alamat' => $validated['alamat'],
+                'kota' => $validated['kota'],
+                'telepon' => $validated['telepon'],
+            ]);
+
+            $pelanggan->user->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+            ]);
+        });
+
+        return redirect()
+            ->route('admin.pelanggan.index')
+            ->with('success', 'Data pelanggan berhasil diperbarui.');
+    }
+
+    public function pelangganDestroy(Pelanggan $pelanggan): RedirectResponse
+    {
+        DB::transaction(function () use ($pelanggan) {
+            $pelanggan->user()->delete(); // user and pelanggan automatically cascade delete if foreign key is set with onDelete('cascade')
+        });
+
+        return redirect()
+            ->route('admin.pelanggan.index')
+            ->with('success', 'Pelanggan berhasil dihapus beserta akun login terkait.');
+    }
+
     public function pelangganStore(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -167,6 +220,42 @@ class UserController extends Controller
         ]);
     }
 
+    public function supplierEdit(Supplier $supplier): View
+    {
+        return view('admin.supplier-edit', [
+            'title' => 'Edit Supplier',
+            'role' => 'admin',
+            'description' => 'Perbarui data supplier berikut untuk memperbaiki informasi kontak dan relasi.',
+            'supplier' => $supplier,
+        ]);
+    }
+
+    public function supplierUpdate(Request $request, Supplier $supplier): RedirectResponse
+    {
+        $validated = $request->validate([
+            'kode_supplier' => ['required', 'string', 'max:255', 'unique:supplier,kode_supplier,' . $supplier->id],
+            'nama' => ['required', 'string', 'max:255'],
+            'alamat' => ['required', 'string'],
+            'kota' => ['required', 'string', 'max:255'],
+            'telepon' => ['required', 'string', 'max:20'],
+        ]);
+
+        $supplier->update($validated);
+
+        return redirect()
+            ->route('admin.supplier.index')
+            ->with('success', 'Data supplier berhasil diperbarui.');
+    }
+
+    public function supplierDestroy(Supplier $supplier): RedirectResponse
+    {
+        $supplier->delete();
+
+        return redirect()
+            ->route('admin.supplier.index')
+            ->with('success', 'Data supplier berhasil dihapus.');
+    }
+
     public function apotekerIndex(): View
     {
         $apotekerList = Apoteker::with('user')
@@ -182,5 +271,45 @@ class UserController extends Controller
             'apotekerDenganAkun' => $apotekerList->whereNotNull('user_id')->count(),
             'apotekerBaruBulanIni' => $apotekerList->where('created_at', '>=', now()->startOfMonth())->count(),
         ]);
+    }
+
+    public function apotekerEdit(Apoteker $apoteker): View
+    {
+        return view('admin.apoteker-edit', [
+            'title' => 'Edit Apoteker',
+            'role' => 'admin',
+            'description' => 'Edit data apoteker berikut untuk diperbarui di database.',
+            'apoteker' => $apoteker,
+        ]);
+    }
+
+    public function apotekerUpdate(Request $request, Apoteker $apoteker): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'alamat' => ['required', 'string'],
+            'kota' => ['required', 'string', 'max:255'],
+            'telepon' => ['required', 'string', 'max:20'],
+        ]);
+
+        $apoteker->update([
+            'nama' => $validated['name'],
+            'alamat' => $validated['alamat'],
+            'kota' => $validated['kota'],
+            'telepon' => $validated['telepon'],
+        ]);
+
+        return redirect()
+            ->route('admin.apoteker.index')
+            ->with('success', 'Data apoteker berhasil diperbarui.');
+    }
+
+    public function apotekerDestroy(Apoteker $apoteker): RedirectResponse
+    {
+        $apoteker->user()->delete(); // user and apoteker automatically cascade delete if foreign key is set with onDelete('cascade')
+
+        return redirect()
+            ->route('admin.apoteker.index')
+            ->with('success', 'Data apoteker berhasil dihapus.');
     }
 }

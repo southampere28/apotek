@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }} - {{ config('apotek.app_name', 'Farmasi Kita') }}</title>
     @include('layouts.template')
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app-datatable.css') }}">
+
+    @stack('styles')
 </head>
 <body>
     @php
@@ -43,8 +47,6 @@
                         ['label' => 'Pelanggan', 'routeName' => 'admin.pelanggan.index'],
                         ['label' => 'Supplier', 'routeName' => 'admin.supplier.index'],
                         ['label' => 'Apoteker', 'routeName' => 'admin.apoteker.index'],
-                        ['label' => 'Laporan', 'routeName' => 'admin.laporan.index', 'badge' => 'New'],
-                        ['label' => 'Pengaturan', 'routeName' => 'admin.pengaturan.index'],
                     ],
                 ],
             ],
@@ -53,6 +55,29 @@
 
         <main class="main">
             <div class="shell">
+                @if (request()->routeIs('admin.dashboard'))
+                    <header class="topbar">
+                        @include('layouts.partials.mobile-toggle')
+                        <div class="page-head">
+                            <span class="badge">{{ $role }}</span>
+                            <h1>{{ $title }}</h1>
+                            <p class="meta">{{ $description }}</p>
+                        </div>
+
+                        <div class="topbar-actions">
+                            <div style="text-align: right;">
+                                <div style="font-weight: 800;">{{ $currentUserName }}</div>
+                                <div class="meta">Sesi berjalan</div>
+                            </div>
+                            <div class="avatar">{{ $currentUserInitial }}</div>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button class="logout" type="submit">Logout</button>
+                            </form>
+                        </div>
+                    </header>
+                @endif
+
                 @yield('dashboard-content')
             </div>
         </main>
@@ -84,5 +109,9 @@
             }
         })();
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
+    <script src="{{ asset('js/app-datatable.js') }}"></script>
+
+    @stack('scripts')
 </body>
 </html>

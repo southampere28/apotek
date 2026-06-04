@@ -7,44 +7,12 @@
         </div>
     @endif
 
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-body p-4">
-            <form method="GET" action="{{ route('apoteker.obat.index') }}" class="row g-3 align-items-end">
-                <div class="col-12 col-md-4">
-                    <label for="search" class="form-label fw-semibold">Cari Obat</label>
-                    <input
-                        type="text"
-                        id="search"
-                        name="search"
-                        class="form-control form-control-lg"
-                        value="{{ $search ?? '' }}"
-                        placeholder="Nama obat, kode, atau supplier"
-                    >
-                </div>
-
-                <div class="col-12 col-md-3">
-                    <label for="filter" class="form-label fw-semibold">Filter Kadaluarsa</label>
-                    <select id="filter" name="filter" class="form-select form-select-lg">
-                        <option value="" @selected(($filter ?? '') === '')>Semua</option>
-                        <option value="soon" @selected(($filter ?? '') === 'soon')>Akan Kadaluarsa 30 Hari</option>
-                        <option value="expired" @selected(($filter ?? '') === 'expired')>Sudah Kadaluarsa</option>
-                    </select>
-                </div>
-
-                <div class="col-12 col-md-5 d-flex gap-2 justify-content-md-end">
-                    <button type="submit" class="btn btn-primary btn-lg px-4 rounded-pill">Terapkan</button>
-                    <a href="{{ route('apoteker.obat.index') }}" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">Reset</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <div class="alert alert-info border-0 shadow-sm rounded-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4" role="alert">
         <div>
             <div class="fw-bold text-primary-emphasis mb-1">Data Obat</div>
             <div class="text-primary-emphasis">Apoteker melihat master obat, stok, dan status kadaluarsa secara real-time.</div>
         </div>
-        <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Read Only</span>
+        {{-- <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Read Only</span> --}}
     </div>
 
     <div class="row g-4 mb-4">
@@ -95,6 +63,38 @@
         </div>
     </div>
 
+    <div class="card border-0 shadow-sm rounded-4 mb-1">
+        <div class="card-body p-4">
+            <form method="GET" action="{{ route('apoteker.obat.index') }}" class="row g-3 align-items-end">
+                <div class="col-12 col-md-4">
+                    <label for="search" class="form-label fw-semibold">Cari Obat</label>
+                    <input
+                        type="text"
+                        id="search"
+                        name="search"
+                        class="form-control form-control-lg"
+                        value="{{ $search ?? '' }}"
+                        placeholder="Nama obat, kode, atau supplier"
+                    >
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label for="filter" class="form-label fw-semibold">Filter Kadaluarsa</label>
+                    <select id="filter" name="filter" class="form-select form-select-lg">
+                        <option value="" @selected(($filter ?? '') === '')>Semua</option>
+                        <option value="soon" @selected(($filter ?? '') === 'soon')>Akan Kadaluarsa 30 Hari</option>
+                        <option value="expired" @selected(($filter ?? '') === 'expired')>Sudah Kadaluarsa</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-5 d-flex gap-2 justify-content-md-end">
+                    <button type="submit" class="btn btn-primary btn-lg px-4 rounded-pill">Terapkan</button>
+                    <a href="{{ route('apoteker.obat.index') }}" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-header bg-white border-0 rounded-top-4 py-3 px-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
             <div>
@@ -104,8 +104,13 @@
         </div>
 
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive p-2">
+                <table id="obatDatatable"
+                    class="table table-hover align-middle mb-0 js-datatable"
+                    data-per-page="5"
+                    data-searchable="false"
+                    data-sortable="true">
+
                     <thead class="table-light">
                         <tr>
                             <th class="px-4 py-3">Gambar</th>
@@ -171,61 +176,4 @@
         </div>
     </div>
 
-    <section class="content mt-4">
-        <div class="panel border-0 shadow-sm">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Ringkasan Obat</h2>
-                    <p class="panel-subtitle">Ringkasan stok dan kadaluarsa untuk apoteker.</p>
-                </div>
-            </div>
-
-            <div class="quick-grid">
-                <div class="quick-card border rounded-4">
-                    <strong>Stok Aman</strong>
-                    <span>{{ $totalObat - $stokMenipis }} obat dalam kondisi aman.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Perlu Restock</strong>
-                    <span>{{ $stokMenipis }} obat butuh perhatian stok.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Stok Habis</strong>
-                    <span>{{ $stokHabis }} obat kosong.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Sudah Kadaluarsa</strong>
-                    <span>{{ $totalKadaluarsa }} obat sudah lewat tanggal kadaluarsa.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Akan Kadaluarsa</strong>
-                    <span>{{ $totalAkanKadaluarsa }} obat akan kadaluarsa dalam 30 hari.</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel border-0 shadow-sm">
-            <div class="panel-header">
-                <div>
-                    <h2 class="panel-title">Aksi Cepat</h2>
-                    <p class="panel-subtitle">Shortcut untuk pengecekan obat.</p>
-                </div>
-            </div>
-
-            <div class="quick-grid">
-                <div class="quick-card border rounded-4">
-                    <strong>Cek Stok</strong>
-                    <span>Lihat ketersediaan obat per item.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Filter Kadaluarsa</strong>
-                    <span>Temukan obat yang mendekati tanggal habis.</span>
-                </div>
-                <div class="quick-card border rounded-4">
-                    <strong>Preview Katalog</strong>
-                    <span>Cek tampilan katalog publik di tab baru.</span>
-                </div>
-            </div>
-        </div>
-    </section>
 @endsection

@@ -12,7 +12,7 @@
             <div class="fw-bold text-warning-emphasis mb-1">Penjualan Apoteker</div>
             <div class="text-warning-emphasis">Transaksi penjualan obat dibuat dengan format kasir dan data real ke database.</div>
         </div>
-        <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Real Data</span>
+        {{-- <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">Real Data</span> --}}
     </div>
 
     <div class="row g-4 mb-4">
@@ -64,8 +64,13 @@
         </div>
 
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive p-2">
+                <table id="penjualanDatatable"
+                    class="table table-hover align-middle mb-0 js-datatable"
+                    data-per-page="5"
+                    data-searchable="false"
+                    data-sortable="true">
+
                     <thead class="table-light">
                         <tr>
                             <th class="px-4 py-3">Nota</th>
@@ -113,5 +118,6 @@
                 </table>
             </div>
         </div>
+
     </div>
 @endsection

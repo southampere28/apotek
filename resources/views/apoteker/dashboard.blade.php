@@ -56,18 +56,18 @@
             </div>
 
             <div class="quick-grid">
-                <div class="quick-card border rounded-4">
+                <a href="{{ route('apoteker.penjualan.index') }}" class="quick-card border rounded-4 text-decoration-none text-dark">
                     <strong>Penjualan</strong>
                     <span>Buka transaksi kasir untuk melayani pelanggan.</span>
-                </div>
-                <div class="quick-card border rounded-4">
+                </a>
+                <a href="{{ route('apoteker.obat.index') }}" class="quick-card border rounded-4 text-decoration-none text-dark">
                     <strong>Obat</strong>
                     <span>Lihat stok, harga, dan status kadaluarsa obat.</span>
-                </div>
-                <div class="quick-card border rounded-4">
+                </a>
+                <a href="{{ route('home') }}" target="_blank" class="quick-card border rounded-4 text-decoration-none text-dark">
                     <strong>Preview Katalog</strong>
                     <span>Cek tampilan katalog publik di tab baru.</span>
-                </div>
+                </a>
             </div>
         </div>
     </section>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Obat;
 use App\Models\Pembelian;
 use App\Models\PembelianDetail;
+use App\Models\Penjualan;
 use App\Models\Supplier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -49,10 +50,17 @@ class TransactionController extends Controller
 
     public function penjualanIndex(): View
     {
+        $penjualan = Penjualan::query()
+            ->with(['pelanggan', 'detail.obat'])
+            ->withCount('detail')
+            ->orderByDesc('tanggal_nota')
+            ->get();
+
         return view('admin.penjualan', [
             'title' => 'Penjualan',
             'role' => 'admin',
             'description' => 'Halaman penjualan akan memakai UI kasir yang sama seperti pembelian untuk reuse di modul apoteker nanti.',
+            'penjualanList' => $penjualan,
         ]);
     }
 
