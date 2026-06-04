@@ -10,6 +10,7 @@ use App\Models\Penjualan;
 use App\Models\Supplier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -88,6 +89,7 @@ class TransactionController extends Controller
             'nota' => ['required', 'string', 'max:255', 'unique:pembelian,nota'],
             'supplier_id' => ['required', 'exists:supplier,id'],
             'diskon' => ['nullable', 'integer', 'min:0'],
+            'tanggal_nota' => ['nullable', 'date_format:Y-m-d\TH:i'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.obat_id' => [
                 'required',
@@ -120,7 +122,7 @@ class TransactionController extends Controller
 
             $pembelian = Pembelian::create([
                 'nota' => $validated['nota'],
-                'tanggal_nota' => now(),
+                'tanggal_nota' => $validated['tanggal_nota'] ? Carbon::parse($validated['tanggal_nota']) : now(),
                 'supplier_id' => $validated['supplier_id'],
                 'diskon' => $diskon,
                 'subtotal' => $subtotal,

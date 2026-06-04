@@ -64,7 +64,7 @@
                     @error('diskon')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 col-md-6">
                     <label for="{{ $partyFieldName }}" class="form-label fw-semibold">{{ $partyLabel }}</label>
                     <select id="{{ $partyFieldName }}" name="{{ $partyFieldName }}" class="form-select form-select-lg @error($partyFieldName) is-invalid @enderror">
                         <option value="">{{ $partyPlaceholder }}</option>
@@ -76,6 +76,13 @@
                     </select>
                     @error($partyFieldName)<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="tanggal_nota" class="form-label fw-semibold">Tanggal Nota</label>
+                    <input type="datetime-local" id="tanggal_nota" name="tanggal_nota" class="form-control form-control-lg @error('tanggal_nota') is-invalid @enderror" value="{{ old('tanggal_nota') }}">
+                    @error('tanggal_nota')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+
             </div>
 
             <div class="row g-4">
