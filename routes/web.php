@@ -208,7 +208,10 @@ Route::middleware('auth:web')->group(function () {
                 'description' => 'Input transaksi penjualan dengan pilihan pelanggan, obat, jumlah, dan harga jual.',
                 'referenceCode' => generate_nota_penjualan(),
                 'pelangganList' => Pelanggan::orderBy('nama')->get(),
-                'obatList' => Obat::query()->orderBy('nama_obat')->get(),
+                'obatList' => Obat::query()
+                    ->whereDate('tanggal_kadaluarsa', '>=', now()->addDays(30))
+                    ->orderBy('nama_obat')
+                    ->get(),
             ]);
         })->name('penjualan.create');
 
